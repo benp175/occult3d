@@ -1,0 +1,37 @@
+{
+    "nevents": 1,                                #Number of events
+    "name": "UK126",
+    "spkid": "20229762",
+
+    "epoch_jd":  2454300.0,
+    "nwalkers": 100,
+    "nsteps": 1000,
+    "nburnin": 1000,
+    "clustering_burnin": 200,
+
+    "use_clustering": true,
+    "multi_sample": false,
+
+    "occultation data": "occultations.csv",
+    "chord data": "chords.csv",
+    "init guess": "uk126_init_guess.csv",
+    "ephem": "229762_2007UK126_nima_v11.bsp",
+
+    "maclaurin": true,
+
+    "max_a": 2000,
+    "ra_prior": 20.6,
+    "ra_error": 1.5,
+    "dec_prior": 46.25,
+    "dec_error": 0.32,
+    "dmag_prior": 0.03,
+    "dmag_error": 10000000,
+    "lc_time": "2014-10-30 12:00",
+
+    "H_mag": 4.476,
+    "H_mag_err": 0.013,
+    "mass": 136.1e18,
+    "mass_err": 3.3e18,
+
+    "verbose" : false
+}

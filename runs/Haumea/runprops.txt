@@ -1,0 +1,39 @@
+{
+    "nevents": 1,                                #Number of events
+    "name": "Haumea",
+    "spkid": "20136108",
+
+    "epoch_jd":  2454300.0,
+    "nwalkers": 100,
+    "nsteps": 1000,
+    "nburnin": 1000,
+    "clustering_burnin": 200,
+
+    "use_clustering": true,
+    "multi_sample": false,
+
+    "occultation data": "occultations.csv",
+    "chord data": "chords.csv",
+    "init guess": "Haumea_init_guess.csv",
+    "ephem": "20136108.bsp",
+
+    "max_a": 2000,
+    "ra_prior": 285.1,
+    "ra_error": 0.5,
+    "dec_prior": -10.6,
+    "dec_error": 1.2,
+    "phi_prior": 76.3,
+    "phi_error": 3.6,
+    "dmag_prior": 0.32,
+    "dmag_error": 0.1,
+    "lc_time": "2009-02-04 12:00",
+
+    "H_mag": 4.476,
+    "H_mag_err": 0.013,
+    "mass": 3952.44e18,
+    "mass_err": 11.06e18,
+    "r_sat": 0,
+    "r_sat_err": 0,
+
+    "verbose" : false
+}

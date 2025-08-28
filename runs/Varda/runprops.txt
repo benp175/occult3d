@@ -1,0 +1,37 @@
+{
+    "nevents": 1,                                #Number of events
+    "name": "Varda",
+    "spkid": "20174567",
+
+    "epoch_jd":  2454300.0,
+    "nwalkers": 100,
+    "nsteps": 5000,
+    "nburnin": 5000,
+    "clustering_burnin": 1000,
+
+    "use_clustering": true,
+    "multi_sample": false,
+
+    "occultation data": "occultations.csv",
+    "chord data": "chords.csv",
+    "init guess": "Varda_init_guess.csv",
+    "ephem": "174567_Varda_nima_v14.bsp",
+
+    "max_a": 2000,
+    "ra_prior": 272.6,
+    "ra_error": 1.45,
+    "dec_prior": -10.8,
+    "dec_error": 1.95,
+    "dmag_prior": 0.02,
+    "dmag_error": 100000,
+    "lc_time": "2013-07-04 12:00",
+
+    "H_mag": 4.476,
+    "H_mag_err": 0.013,
+    "mass": 267.5e18,
+    "mass_err": 4.85e18,
+    "r_sat": 2.22,
+    "r_sat_err": 0.04,
+
+    "verbose" : false
+}
