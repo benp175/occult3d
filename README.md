@@ -89,7 +89,7 @@ runs/
 | Column | Description |
 |---|---|
 | `Date` | Event date/time (must match `chords.csv`) |
-| `Star coordinates` | Occulted star ICRS coordinates (e.g. `"04 29 30.61 -00 28 20.908"`) |
+| `Star GDR3 code` | Occulted star Gaia DR3 code |
 
 **`<target>_init_guess.csv`** — initial MCMC walker positions, one row per parameter:
 
