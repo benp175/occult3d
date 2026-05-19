@@ -173,7 +173,6 @@ Each completed run produces:
 | `corner+derived.pdf` | Corner plot including derived quantities (volumetric radius, density) |
 | `walkers.pdf` | Walker trace plots for all parameters |
 | `limbs.pdf` | Best-fit limb overlaid on chord endpoints (sky plane) |
-| `limbs_3d.pdf` | 3D shape visualisation |
 | `likelihoods.pdf` | Log-likelihood as a function of a single variable (different colors = different walker) |
 | `sigsdf.csv` | Posterior medians and uncertainties for all parameters |
 | `runprops.txt` | Copy of the run configuration |
