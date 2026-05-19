@@ -47,7 +47,7 @@ commentjson
 h5py
 ```
 
-A SPICE ephemeris kernel for your target body (`.bsp` file) is also required, along with a solar system ephemeris (e.g., `de438s.bsp`, provided in `runs/ephem/`).
+A SPICE ephemeris kernel for your target body (`.bsp` file) is also required, along with a solar system ephemeris (e.g., `de438s.bsp`).
 
 ## Quick start
 
@@ -112,42 +112,49 @@ Each parameter has a `mean` and `stddev` column used to initialise walkers via a
 
 ```jsonc
 {
-    "nevents": 1,                       // Number of occultation events
+    # Define target
     "name": "MyTarget",                 // Target name (used for output folder naming)
     "spkid": "20229762",                // SPICE ID for the target body
 
+
+    # MCMC settings
     "nwalkers": 100,                    // Number of MCMC walkers
     "nsteps": 1000,                     // Production steps per walker
     "nburnin": 1000,                    // Burn-in steps per walker
     "clustering_burnin": 200,           // Additional burn-in after clustering
-
     "use_clustering": true,             // Enable walker clustering
     "multi_sample": false,              // Use DE/Snooker moves (vs default stretch)
 
+
+    # Input files
     "occultation data": "occultations.csv",
     "chord data": "chords.csv",
     "init guess": "MyTarget_init_guess.csv",
     "ephem": "MyTarget_ephem.bsp",      // Target ephemeris kernel (placed in runs/ephem/)
 
-    "maclaurin": false,                 // Force a = b (Maclaurin spheroid)
 
-    "max_a": 2000,                      // Prior: maximum semi-major axis (km)
+    # Fitting settings
+    "maclaurin": false,                 // Force a = b (Maclaurin spheroid)
+    "topography": 0,                    // Topography-induced uncertainty
+    "max_a": 2000,                      // Maximum semi-major axis (km) to limit unbounded exploration
+    "nevents": 1,                       // Number of occultation events (not currently able to do >1)
+
+
+    # Priors
     "ra_prior": 0.0,                    // Prior: spin pole RA centre (degrees)
     "ra_error": 360.0,                  // Prior: spin pole RA uncertainty (degrees)
     "dec_prior": 0.0,                   // Prior: spin pole Dec centre (degrees)
     "dec_error": 90.0,                  // Prior: spin pole Dec uncertainty (degrees)
     "lc_time": "2014-10-30 12:00",      // Reference time for light curve constraint
-
-    "H_mag": 4.476,                     // Absolute magnitude (used to calculate albedo in some cases)
-    "H_mag_err": 0.013,
     "dmag_prior": 0.0,                  // Light curve amplitude prior
     "dmag_error": 1.0,
+
+
+    # Inputs to calculate derived parameters
     "mass": 1.36e20,                    // Body mass (kg) for density calculation
     "mass_err": 3.3e18,
     "sat_size_ratio": 4.45,             // Size ratio between primary and satellite (D_primary/D_sat)
-    "sat_size_ratio_err": 0.08,
-
-    "verbose": false
+    "sat_size_ratio_err": 0.08
 }
 ```
 
