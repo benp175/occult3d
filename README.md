@@ -144,6 +144,8 @@ Each parameter has a `mean` and `stddev` column used to initialise walkers via a
     "dmag_error": 1.0,
     "mass": 1.36e20,                    // Body mass (kg) for density calculation
     "mass_err": 3.3e18,
+    "sat_size_ratio": 4.45,             // Size ratio between primary and satellite (D_primary/D_sat)
+    "sat_size_ratio_err": 0.08,
 
     "verbose": false
 }
