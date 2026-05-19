@@ -44,6 +44,7 @@ shapely
 astropy
 sora
 commentjson
+h5py
 ```
 
 A SPICE ephemeris kernel for your target body (`.bsp` file) is also required, along with a solar system ephemeris (e.g., `de438s.bsp`, provided in `runs/ephem/`).
