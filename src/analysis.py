@@ -96,9 +96,7 @@ def analysis(sampler, allpositive, allpositive_err, allnegative, occobj, paramna
 
     # Add density
     mass = np.random.normal(runprops.get("mass"), runprops.get("mass_err"), r_vol.shape)
-    #r_sat = np.random.normal(runprops.get("r_sat"), runprops.get("r_sat_err"), r_vol.shape)
-    
-    size_ratio = np.random.normal(runprops.get("r_sat"), runprops.get("r_sat_err"), r_vol.shape)
+    size_ratio = np.random.normal(runprops.get("sat_size_ratio"), runprops.get("sat_size_ratio_err"), r_vol.shape)
     r_sat = r_vol/size_ratio
     
     density = mass/((4/3)*np.pi*((r_vol*1000)**3 + ((r_sat*1000)**3)))
@@ -147,12 +145,13 @@ def analysis(sampler, allpositive, allpositive_err, allnegative, occobj, paramna
     dfchain = np.concatenate((dfchain, np.array([ba]).T), axis = 1)
 
     paramnames.append("c/a")
-    paramnames.append("b/a")
-
     latexlabels.append(r"$c/a$")
-    latexlabels.append(r"$b/a$")
-    
-        # add more if wanted
+
+    if not runprops.get("maclaurin"):
+        paramnames.append("b/a")
+        latexlabels.append(r"$b/a$")
+
+    # add more if wanted
 
     del flatchain
     flatchain = dfchain
@@ -175,8 +174,9 @@ def analysis(sampler, allpositive, allpositive_err, allnegative, occobj, paramna
     plot_limbs(flatchain, flatlhood, occobj, runprops, ndraws = 100)
 
     # Make 3d limb plots
-    print("Making 3d limb plots")
-    plot_limbs_3d(flatchain, flatlhood, occobj, runprops, lim = np.median(r_vol))
+    # Currently not working!
+    #print("Making 3d limb plots")
+    #plot_limbs_3d(flatchain, flatlhood, occobj, runprops, lim = np.median(r_vol))
 
 def plot_trace(chain, names, runprops):
     # Make the walker plot PDFs
@@ -186,7 +186,7 @@ def plot_trace(chain, names, runprops):
     nwalkers = runprops.get("nwalkers")
     numgens = chain.shape[0]
     for i in range(len(names)):
-        plt.figure(dpi = 50)
+        plt.figure(dpi = 150)
         for j in range(nwalkers):
             plt.plot(np.reshape(chain[0:numgens,j,i], numgens), alpha=0.2, rasterized=True)
         plt.ylabel(names[i])

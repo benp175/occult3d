@@ -52,18 +52,30 @@ def probability(params, positive, positive_err, negative, occobj, velocity, runp
 
     # Cancel the likelihood evaluation if priors are -inf
     if not np.isfinite(lp):
+        #return -np.inf, np.full(len(positive[0]), np.nan)
         return -np.inf
 
     # Calculate the likelihood
     pole = SkyCoord(params[3], params[4], unit = "deg", frame = "icrs")
-    lh = likelihood(params, positive, positive_err, negative, occobj, velocity, runprops, pole)
+    lh, lh_vec = likelihood(params, positive, positive_err, negative, occobj, velocity, runprops, pole)
+
+    # Cancel further eval if chord intersects
+    if not np.isfinite(lh):
+        #return -np.inf, np.full(len(positive[0]), np.nan)
+        return -np.inf
 
     # Add in the light curve prior
-    lp2 = lc_prior(params, occobj, runprops, pole)
-    #lp2 = 0
+    if not runprops.get("maclaurin"):
+        lp2 = lc_prior(params, occobj, runprops, pole)
+        #print("doing lc")
+    else:
+        lp2 = 0
 
     # Return the combined probability
-    return (lh + lp + lp2)
+    #print(lh_vec.shape)
+    lpp = (lh + lp + lp2)
+    lh_vec = np.asarray(lh_vec, dtype=float).reshape(len(positive[0]),)
+    return lpp
 
 def likelihood(params, positive, positive_err, negative, occobj, velocity, runprops, pole):
     # Unpack parameters
@@ -76,6 +88,7 @@ def likelihood(params, positive, positive_err, negative, occobj, velocity, runpr
     #nevents = 2
 
     chisq = 0
+    chisq_vec = []
     for i in range(nevents):
         # Exract occultation object
         occ = occobj[i]
@@ -85,10 +98,13 @@ def likelihood(params, positive, positive_err, negative, occobj, velocity, runpr
         fg_err = np.array(positive_err[i])
         negevent = negative[i]
         velevent = velocity[i]
-        chisq += chisquare(a, b, c, ra, dec, phi, f, g, fg_data, fg_err, negevent, occ, velevent, runprops, pole)
+        chisq_summed, chisq_veci = chisquare(a, b, c, ra, dec, phi, f, g, fg_data, fg_err, negevent, occ, velevent, runprops, pole)
+        chisq += chisq_summed
+        chisq_vec.append(chisq_veci.tolist())
 
     # Finishing up
-    return -0.5*chisq
+    chisq_vec = np.array(chisq_vec)
+    return -0.5*chisq, -0.5*chisq_vec
 
 def chisquare(a, b, c, ra, dec, phi, f, g, fg_data, fg_err, negative, occ, velevent, runprops, pole):
     # Calculate chisquare using sora methods
@@ -126,7 +142,7 @@ def chisquare(a, b, c, ra, dec, phi, f, g, fg_data, fg_err, negative, occ, velev
                                        position_angle=pa)[2]
         intersects = np.any((r_path - r_ellipse) < 0)
         if intersects:
-            return np.inf
+            return np.inf, np.ones(fg_err.size)*np.inf
 
     # First calculate the ellipse
     initial = Parameters()
@@ -142,10 +158,16 @@ def chisquare(a, b, c, ra, dec, phi, f, g, fg_data, fg_err, negative, occ, velev
     angs = np.arctan( (-(fg_data[:,0] - f)/(fg_data[:,1] - g)) * np.power(v_model / u_model, 2) ) + (np.pi/2)
     observer_vecs = np.array([np.cos(angs), np.sin(angs)])
     normal_vels = np.abs( np.sum(observer_vecs * np.array(velevent).T, axis = 0) / np.linalg.norm(observer_vecs, axis = 0) )
+
+    # Add some uncertainty for topography
+    # Make this backwards compatible with runprops without this setting
+    sig_topo = runprops.get("topography")
+    if sig_topo is None:
+        sig_topo = 0
     
     # Now find the chi square
-    chisqs = sora.occultation.fitting.ellipseError(initial, fg_data[:,0], fg_data[:,1], fg_err*normal_vels)
-    return np.sum(chisqs)
+    chisqs = sora.occultation.fitting.ellipseError(initial, fg_data[:,0], fg_data[:,1], np.sqrt( (fg_err*normal_vels)**2 + (sig_topo)**2 ) )
+    return np.sum(chisqs), chisqs
 
 def prior(params, runprops):
     lp = 0
@@ -165,13 +187,13 @@ def prior(params, runprops):
         return -np.inf
     if (b < c):
         return -np.inf
-    if (phi > 180) or (phi < 0):
+    if (phi > 360) or (phi < 0):
         return -np.inf
-    if (a < 0) or (b < 0) or (c < 0):
+    if (a < 0) or (b < 0) or (c < 0): 
         return -np.inf
     if (ra < 0) or (ra > 360) or (dec < -90) or (dec > 90):
         return -np.inf
-    if (c/a < 0.3):
+    if (c/a < 0.4):
         return -np.inf
 
     # Now implement geometrical priors
@@ -211,6 +233,7 @@ def lc_prior(params, occobj, runprops, pole):
 
     dm_prior = runprops.get("dmag_prior")
     dm_err = runprops.get("dmag_error")
+    #print(dm, dm_prior, dm_err)
 
     # Now calculate the prior
     lp = -0.5 * ( (dm - dm_prior)/(dm_err) )**2

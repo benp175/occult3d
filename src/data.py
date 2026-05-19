@@ -57,11 +57,11 @@ def condition_data(runprops):
         emersion_errs = eventchords["Emersion error"].to_numpy()
 
         time = event["Date"]
-        starcoord = event["Star coordinates"]
+        starcoord = event["Star GDR3 code"]
         
         body = Body(name = runprops.get("name"), database = None, spkid = runprops.get("spkid"), 
                               ephem = ["../ephem/"+runprops.get("ephem"),"../ephem/de438s.bsp"], H = runprops.get("H_mag"))
-        star = Star(coord = starcoord)
+        star = Star(code = starcoord)
         occ = Occultation(star = star, body = body, time = time)
         runprops["distance" + str(i)] = occ.dist.value*149597870.7
         runprops["occ_coord"] = body.ephem.get_position(time, observer = "geocenter")

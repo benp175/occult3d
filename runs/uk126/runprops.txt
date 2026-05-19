@@ -7,7 +7,7 @@
     "nwalkers": 100,
     "nsteps": 1000,
     "nburnin": 1000,
-    "clustering_burnin": 200,
+    "clustering_burnin": 1000,
 
     "use_clustering": true,
     "multi_sample": false,
@@ -17,21 +17,22 @@
     "init guess": "uk126_init_guess.csv",
     "ephem": "229762_2007UK126_nima_v11.bsp",
 
-    "maclaurin": true,
+    "maclaurin": false,
+    "topography": 0,
 
-    "max_a": 2000,
+    "max_a": 5000,
     "ra_prior": 20.6,
     "ra_error": 1.5,
     "dec_prior": 46.25,
     "dec_error": 0.32,
     "dmag_prior": 0.03,
-    "dmag_error": 10000000,
-    "lc_time": "2014-10-30 12:00",
+    "dmag_error": 0.01,
+    "lc_time": "2013-10-30 12:00",
 
-    "H_mag": 4.476,
-    "H_mag_err": 0.013,
     "mass": 136.1e18,
     "mass_err": 3.3e18,
+    "sat_size_ratio": 4.45,
+    "sat_size_ratio_err": 0.08,
 
     "verbose" : false
 }
