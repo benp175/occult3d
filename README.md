@@ -20,12 +20,24 @@ A Python tool to fit a triaxial ellipsoid shape model to stellar occultation cho
 
 If you use `occult3d` in your research, please cite the associated paper:
 
-> Citation to be added upon publication.
+> https://iopscience.iop.org/article/10.3847/PSJ/ae77fa/meta
 
 A BibTeX entry for use in LaTeX:
 
 ```bibtex
-% Add BibTeX entry here upon publication
+@article{Proudfoot_2026,
+doi = {10.3847/PSJ/ae77fa},
+url = {https://doi.org/10.3847/PSJ/ae77fa},
+year = {2026},
+month = {jun},
+publisher = {The American Astronomical Society},
+volume = {7},
+number = {6},
+pages = {156},
+author = {Proudfoot, Benjamin and Grundy, Will and Rommel, Flavia Luane and Fernández-Valenzuela, Estela and Ragozzine, Darin},
+title = {Triaxial Shapes and Densities of G!kún∣∣’hòmdímà, Haumea, and Varda from Stellar Occultations},
+journal = {The Planetary Science Journal}
+}
 ```
 
 ## Dependencies
